@@ -1,0 +1,18 @@
+{
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es2021": true
+  },
+  "extends": ["standard", "prettier"],
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "no-debugger": "error", // disallow the use of 'debugger` (recommended)
+    "no-dupe-args": "error", // disallow duplicate arguments in 'function` definitions (recommended)
+    "no-dupe-keys": "error", // disallow duplicate keys in object literals (recommended)
+    "no-duplicate-case": "error", // disallow duplicate case labels (recommended)
+    "no-empty": "error", // disallow empty block statements (recommended)
+    "no-undefined": "off", // disallow the use of 'undefined` as an identifier
+    "no-unused-vars": "error" // disallow unused variables (recommended)
+  }
+}

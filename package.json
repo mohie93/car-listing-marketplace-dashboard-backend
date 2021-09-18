@@ -1,0 +1,44 @@
+{
+  "name": "car-listing-marketplace-dashboard-backend",
+  "version": "1.0.0",
+  "description": "API with ExpressJS to manage car-listing-marketplace-dashboard CRUD, Filter and Search.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon app.js",
+    "start": "node app.js",
+    "test": "jest --runInBand --detectOpenHandles --passWithNoTests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohie93/car-listing-marketplace-dashboard-backend.git"
+  },
+  "keywords": [
+    "dashboard",
+    "backend",
+    "API"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mohie93/car-listing-marketplace-dashboard-backend/issues"
+  },
+  "homepage": "https://github.com/mohie93/car-listing-marketplace-dashboard-backend#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "joi": "^17.4.1",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "eslint": "^7.28.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "jest": "^27.0.6",
+    "nodemon": "^2.0.9",
+    "prettier": "2.3.1"
+  }
+}
