@@ -12,6 +12,7 @@ exports.up = function(knex) {
         table.string('email').notNullable();
         table.timestamp('createdAt').defaultTo(knex.fn.now());
         table.timestamp('updatedAt').defaultTo(knex.fn.now());
+        table.uuid('roleId').references('id').inTable('roles').onDelete('CASCADE')
       });
     }
   });
