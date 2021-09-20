@@ -1,3 +1,5 @@
+'use strict';
+
 // Load ENV
 require('dotenv').config({});
 
@@ -12,7 +14,12 @@ app.use(express.urlencoded({ extended: true })); // for parsing application/x-ww
 const port = process.env.PORT || 5000;
 
 // check server status
-app.get('/', (_, res) => res.status(200).json({ message: 'OK', version: require('./package.json').version }));
+app.get('/', (_, res) =>
+  res.status(200).json({
+    message: 'OK',
+    version: require('./package.json').version,
+  }),
+);
 
 // routes
 // To be added

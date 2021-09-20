@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon app.js",
-    "start": "node app.js",
+    "start": "node app.js && knex migrate:up",
+    "migrate:up": "knex migrate:up",
+    "migrate:down": "knex migrate:down",
     "test": "jest --runInBand --detectOpenHandles --passWithNoTests"
   },
   "repository": {
@@ -28,7 +30,11 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "joi": "^17.4.1",
-    "uuid": "^8.3.2"
+    "pg": "^8.7.1",
+    "pg-hstore": "^2.3.4",
+    "uuid": "^8.3.2",
+    "knex": "^0.95.9",
+    "mysql2": "^2.2.5"
   },
   "devDependencies": {
     "eslint": "^7.28.0",
