@@ -9,6 +9,7 @@ exports.up = function(knex) {
         table.uuid('id').primary();
         table.string('startAt').notNullable();
         table.string('endAt').notNullable();
+        table.uuid('carId').references('id').inTable('carsListing').onDelete('CASCADE')
       });
     }
   });

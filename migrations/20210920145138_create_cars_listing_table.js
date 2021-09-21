@@ -10,7 +10,7 @@ exports.up = function(knex) {
         table.string('model').notNullable();
         table.string('brand').notNullable();
         table.string('dayPrice').notNullable();
-        table.json('location').notNullable();
+        table.string('location').notNullable();
         table.specificType('features', 'text ARRAY').notNullable();
       });
     }

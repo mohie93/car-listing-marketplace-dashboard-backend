@@ -1,3 +1,5 @@
+'use strict';
+
 exports.handle = (api) => async (req, res) => {
   try {
     const { statusCode, data } = await api(req, res);
