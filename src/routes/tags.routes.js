@@ -2,7 +2,7 @@
 
 const apiHandler = require('../middlewares/apiHandler');
 const tagsController = require('../controllers/tags.controller');
-const validator = require('../validations/tag.validation');
+const validator = require('../validations/tag.validations');
 const router = require('express').Router();
 
 router.get('/', validator.validateGetAllRequest, apiHandler.handle(tagsController.index));

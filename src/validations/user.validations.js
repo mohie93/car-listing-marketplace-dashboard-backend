@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const DB = require('../configs/kenx');
+const DB = require('../configs/knex');
 
 // helpers //
 async function getUserByEmail(payload) {

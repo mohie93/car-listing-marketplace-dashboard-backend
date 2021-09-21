@@ -1,6 +1,6 @@
 const apiHandler = require('../middlewares/apiHandler');
 const rolesController = require('../controllers/roles.controller');
-const validator = require('../validations/customerProfile.validation');
+const validator = require('../validations/role.validations');
 const router = require('express').Router();
 
 router.get('/', validator.validateGetAllRequest, apiHandler.handle(rolesController.index));

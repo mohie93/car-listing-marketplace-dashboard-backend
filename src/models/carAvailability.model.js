@@ -1,9 +1,9 @@
 'use strict';
 
-const DB = require('../configs/kenx');
+const DB = require('../configs/knex');
 const { v4: uuidv4 } = require('uuid');
 
-const table = 'carsListing';
+const table = 'carsAvailability';
 
 class CarAvailability {
   constructor(payload) {
