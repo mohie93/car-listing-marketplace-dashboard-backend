@@ -7,11 +7,11 @@
 ## How to run the app locally:
 
 - Make sure you have docker installed and running
+- Create the DB
 - Clone from Github
 - CD to the project directory
-- Run command `docker-compose build"
-- Run command `docker-compose up"
 - Wait till the build completed
+- Run command `npm run dev`
 - API on `http://localhost:5000/api/v1`
 
 ## Todos:

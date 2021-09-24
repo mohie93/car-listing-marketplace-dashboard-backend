@@ -3,18 +3,18 @@
 const DB = require('../configs/knex');
 const { v4: uuidv4 } = require('uuid');
 
-const table = 'usersRoles';
+const table = 'usersTags';
 
-class userRole {
+class UserTag {
   constructor(payload) {
     this.id = uuidv4();
     this.userId = payload.userId;
-    this.roleId = payload.roleId;
+    this.tagId = payload.tagId;
   }
 
   save() {
-    const { id, roleId, userId } = this;
-    return DB(table).insert({ id, roleId, userId });
+    const { id, tagId, userId } = this;
+    return DB(table).insert({ id, tagId, userId });
   }
 
   static getAll() {
@@ -28,6 +28,17 @@ class userRole {
   static update(id, options) {
     return DB(table).where({ id }).update(options);
   }
+
+  static searchBy(needle) {
+    return DB(table)
+      .where('tagId', '=', `%${needle}%`)
+      .orWhere('userId', '=', `%${needle}%`)
+      .select('*');
+  }
+
+  static destroy(id) {
+    return DB(table).where({ id }).del();
+  }
 }
 
-module.exports = userRole;
+module.exports = UserTag;

@@ -4,8 +4,8 @@
   "description": "API with ExpressJS to manage car-listing-marketplace-dashboard CRUD, Filter and Search.",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon app.js",
-    "start": "node app.js && knex migrate:up",
+    "dev": "npx knex migrate:latest && nodemon app.js",
+    "start": "node app.js && knex migrate:latest",
     "migrate:up": "knex migrate:up",
     "migrate:down": "knex migrate:down",
     "test": "jest --runInBand --detectOpenHandles --passWithNoTests"
