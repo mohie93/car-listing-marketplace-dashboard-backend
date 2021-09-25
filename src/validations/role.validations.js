@@ -1,4 +1,18 @@
 const Joi = require('joi');
+const DB = require('../configs/knex');
+
+// helpers //
+async function roleNameInUse(payload) {
+  try {
+    const { name } = payload;
+    const record = await DB('roles').where({ name }).select('*');
+    return (Object.keys(record).length > 0 && record.name === name);
+  } catch (error) {
+    throw new Error(`${error}`);
+  }
+}
+
+// helpers finish //
 
 exports.validateCreateRequest = async (req, res, next) => {
   try {
@@ -7,6 +21,9 @@ exports.validateCreateRequest = async (req, res, next) => {
       description: Joi.string().required(),
     });
     await schema.validateAsync(req.body);
+
+    const roleNameUsed = await roleNameInUse(req.body)
+    if (roleNameUsed) res.status(400).json({ message: 'Role name in use' });
     next();
   } catch (errors) {
     const errorsMessages = errors.details.map((error) => error.message);
@@ -81,6 +98,9 @@ exports.validateUpdateRequest = async (req, res, next) => {
       description: Joi.string().required(),
     });
     await schema.validateAsync({ ...req.body, id });
+
+    const roleNameUsed = await roleNameInUse(req.body)
+    if (roleNameUsed) res.status(400).json({ message: 'Role name in use' });
     next();
   } catch (errors) {
     const errorsMessages = errors.details.map((error) => error.message);

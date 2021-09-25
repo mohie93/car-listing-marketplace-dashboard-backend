@@ -8,8 +8,8 @@ const table = 'roles';
 class Role {
   constructor(payload) {
     this.id = uuidv4();
-    this.name = payload.name;
-    this.description = payload.description;
+    this.name = payload.name.toLowerCase();
+    this.description = payload.description.toLowerCase();
   }
 
   save() {
@@ -27,8 +27,8 @@ class Role {
 
   static searchBy(needle) {
     return DB(table)
-      .where('name', 'LIKE', `%${needle}%`)
-      .orWhere('description', 'LIKE', `%${needle}%`)
+      .where('name', '=', needle)
+      .orWhere('description', '=', needle)
       .select('*');
   }
 

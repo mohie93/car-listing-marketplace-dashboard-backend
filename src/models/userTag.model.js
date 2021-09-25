@@ -1,39 +1,64 @@
 'use strict';
 
 const DB = require('../configs/knex');
-const { v4: uuidv4 } = require('uuid');
 
 const table = 'usersTags';
+const tagsTable = 'tags';
+const usersTable = 'users';
 
 class UserTag {
   constructor(payload) {
-    this.id = uuidv4();
     this.userId = payload.userId;
     this.tagId = payload.tagId;
   }
 
   save() {
-    const { id, tagId, userId } = this;
-    return DB(table).insert({ id, tagId, userId });
+    const { tagId, userId } = this;
+    return DB(table).insert({ tagId, userId });
   }
 
   static getAll() {
     return DB(table).select('*');
   }
 
-  static getById(id) {
-    return DB(table).where({ id }).select('*').first();
+  static getBy(id, type) {
+    switch (type) {
+      case 'tag':
+        return this.getByTagId(id);
+      case 'user':
+        return this.getByUserId(id);
+    }
   }
 
-  static update(id, options) {
-    return DB(table).where({ id }).update(options);
+  static getByTagId(tagId) {
+    return DB(table).where({ tagId }).join('users', 'userId', 'users.id').select('*');
   }
 
-  static searchBy(needle) {
-    return DB(table)
-      .where('tagId', '=', `%${needle}%`)
-      .orWhere('userId', '=', `%${needle}%`)
-      .select('*');
+  static getByUserId(userId) {
+    return DB(table).where({ userId }).join('tags', 'tagId', 'tags.id').select('*');
+  }
+
+  static searchBy(needle, type) {
+    switch (type) {
+      case 'tag':
+        return this.searchByTag(needle);
+      case 'user':
+        return this.searchByUser(needle);
+    }
+  }
+
+  static searchByTag(needle) {
+    return DB(tagsTable).where('name', 'LIKE', `%${needle}%`)
+      .rightJoin('usersTags', 'tagId', 'tags.id')
+      .leftJoin('users', 'userId', 'users.id').select('*')
+  }
+
+  static searchByUser(needle) {
+    return DB(usersTable).where('firstName', 'LIKE', `%${needle}%`)
+      .orWhere('lastName', 'LIKE', `%${needle}%`)
+      .orWhere('email', 'LIKE', `%${needle}%`)
+      .leftJoin('usersTags', 'userId', 'users.id')
+      .rightJoin('tags', 'tagId', 'tags.id').select('*')
   }
 
   static destroy(id) {

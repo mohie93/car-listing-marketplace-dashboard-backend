@@ -1,5 +1,17 @@
 const Joi = require('joi');
+const DB = require('../configs/knex');
+// helpers //
+async function tagNameInUse(payload) {
+  try {
+    const { name } = payload;
+    const record = await DB('tags').where({ name }).select('*');
+    return (Object.keys(record).length > 0 && record.name === name);
+  } catch (error) {
+    throw new Error(`${error}`);
+  }
+}
 
+// helpers finish //
 exports.validateCreateRequest = async (req, res, next) => {
   try {
     const schema = Joi.object({
@@ -7,6 +19,9 @@ exports.validateCreateRequest = async (req, res, next) => {
       description: Joi.string().required(),
     });
     await schema.validateAsync(req.body);
+
+    const tagNameUsed = await tagNameInUse(req.body)
+    if (tagNameUsed) res.status(400).json({ message: 'Tag name in use' });
     next();
   } catch (errors) {
     const errorsMessages = errors.details.map((error) => error.message);
@@ -81,6 +96,9 @@ exports.validateUpdateRequest = async (req, res, next) => {
       description: Joi.string().required(),
     });
     await schema.validateAsync({ ...req.body, id });
+
+    const tagNameUsed = await tagNameInUse(req.body)
+    if (tagNameUsed) res.status(400).json({ message: 'Tag name in use' });
     next();
   } catch (errors) {
     const errorsMessages = errors.details.map((error) => error.message);

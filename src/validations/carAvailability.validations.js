@@ -52,7 +52,7 @@ exports.validateSortByRequest = async (req, res, next) => {
     if (!attribute) res.status(400).json({ message: 'attribute param is required' });
     if (!direction) res.status(400).json({ message: 'direction param is required' });
     const schema = Joi.object({
-      attribute: Joi.string().required().valid('carId', 'startAt', 'endAt'),
+      attribute: Joi.string().required().valid( 'startAt', 'endAt'),
       direction: Joi.string().required().valid('asc', 'desc').default('asc'),
     });
     await schema.validateAsync({ attribute, direction });

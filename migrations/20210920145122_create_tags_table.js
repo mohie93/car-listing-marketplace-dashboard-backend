@@ -6,7 +6,7 @@ exports.up = function(knex) {
   return knex.schema.hasTable('tags').then((exists) => {
     if (!exists) {
       return knex.schema.createTable('tags', (table) => {
-        table.uuid('id').primary();
+        table.string('id').primary();
         table.string('name').notNullable();
         table.string('description').defaultTo('')
       });

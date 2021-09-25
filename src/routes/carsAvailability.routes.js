@@ -2,7 +2,7 @@
 
 const apiHandler = require('../middlewares/apiHandler');
 const carsAvailabilityController = require('../controllers/carsAvailability.controller');
-const validator = require('../validations/user.validations');
+const validator = require('../validations/carAvailability.validations');
 const router = require('express').Router();
 
 router.get('/', validator.validateGetAllRequest, apiHandler.handle(carsAvailabilityController.index));

@@ -2,13 +2,13 @@
 
 ## API Documentation
 
-- To be Added
+- [Here](https://documenter.getpostman.com/view/3401137/UUxxgU23)
 
 ## How to run the app locally:
 
 - Make sure you have docker installed and running
 - Create the DB
-- Clone from Github
+- Clone from GitHub
 - CD to the project directory
 - Wait till the build completed
 - Run command `npm run dev`

@@ -8,8 +8,8 @@ const table = 'tags';
 class Tag {
   constructor(payload) {
     this.id = uuidv4();
-    this.name = payload.name;
-    this.description = payload.description;
+    this.name = payload.name.toLowerCase();
+    this.description = payload.description.toLowerCase();
   }
 
   save() {
@@ -21,14 +21,15 @@ class Tag {
     return DB(table).select('*');
   }
 
-  static getById(id) {
-    return DB(table).where({ id }).select('*').first();
+  static getById(id, isArray = false) {
+    return isArray ? DB(table).whereIn('id', id).select('*') :
+      DB(table).where({ id }).select('*').first();
   }
 
   static searchBy(needle) {
     return DB(table)
-      .where('name', 'LIKE', `%${needle}%`)
-      .orWhere('description', 'LIKE', `%${needle}%`)
+      .where('name', '=', needle)
+      .orWhere('description', '=', needle)
       .select('*');
   }
 

@@ -6,11 +6,22 @@ async function getUserByEmail(payload) {
   try {
     const { email } = payload;
     const record = await DB('users').where({ email }).select('*');
+    return (Object.keys(record).length > 0 && record.email === email);
+  } catch (error) {
+    throw new Error(`${error}`);
+  }
+}
+
+async function roleExists(payload) {
+  try {
+    const { roleId } = payload;
+    const record = await DB('roles').where({ id: roleId }).select('*');
     return Object.keys(record).length > 0;
   } catch (error) {
     throw new Error(`${error}`);
   }
 }
+
 // helpers finish //
 
 exports.validateCreateRequest = async (req, res, next) => {
@@ -19,12 +30,15 @@ exports.validateCreateRequest = async (req, res, next) => {
       firstName: Joi.string().required(),
       lastName: Joi.string().required(),
       email: Joi.string().email().required(),
+      roleId: Joi.string().uuid().required(),
     });
 
     await schema.validateAsync(req.body);
 
+    const roleIsExists = await roleExists(req.body);
     const userEmailInUser = await getUserByEmail(req.body);
 
+    if (!roleIsExists) res.status(400).json({ message: 'Invalid role' });
     if (userEmailInUser) res.status(400).json({ message: 'Email in use' });
 
     next();
@@ -100,8 +114,16 @@ exports.validateUpdateRequest = async (req, res, next) => {
       firstName: Joi.string().required(),
       lastName: Joi.string().required(),
       email: Joi.string().email().required(),
+      roleId: Joi.string().uuid().required(),
     });
     await schema.validateAsync({ ...req.body, id });
+
+    const roleIsExists = await roleExists(req.body);
+    const userEmailInUser = await getUserByEmail(req.body);
+
+    if (!roleIsExists) res.status(400).json({ message: 'Invalid role' });
+    if (userEmailInUser) res.status(400).json({ message: 'Email in use' });
+
     next();
   } catch (errors) {
     const errorsMessages = errors.details.map((error) => error.message);

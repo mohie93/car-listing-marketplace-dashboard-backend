@@ -8,11 +8,11 @@ const table = 'carsListing';
 class CarListing {
   constructor(payload) {
     this.id = uuidv4();
-    this.model = payload.model;
-    this.brand = payload.brand;
+    this.model = payload.model.toLowerCase();
+    this.brand = payload.brand.toLowerCase();
     this.dayPrice = payload.dayPrice;
-    this.features = payload.features;
-    this.location = payload.location;
+    this.features = payload.features.join(',').toLowerCase();
+    this.location = payload.location.toLowerCase();
   }
 
   save() {
@@ -34,8 +34,8 @@ class CarListing {
       .orWhere('brand', 'LIKE', `%${needle}%`)
       .orWhere('dayPrice', 'LIKE', `%${needle}%`)
       .orWhere('dayPrice', 'LIKE', `%${needle}%`)
-      .orWhere('features', 'LIKE', `%${needle}%`)
       .orWhere('location', 'LIKE', `%${needle}%`)
+      .orWhere('features', 'LIKE', `%${needle}%`)
       .select('*');
   }
 

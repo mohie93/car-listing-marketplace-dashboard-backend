@@ -9,9 +9,9 @@ class CarAvailability {
   constructor(payload) {
     // carId, startAt, endAt
     this.id = uuidv4();
-    this.carId = payload.carId;
-    this.startAt = payload.startAt;
-    this.endAt = payload.endAt;
+    this.carId = payload.carId.toLowerCase();
+    this.startAt = payload.startAt.toLowerCase();
+    this.endAt = payload.endAt.toLowerCase();
   }
 
   save() {
@@ -23,15 +23,15 @@ class CarAvailability {
     return DB(table).select('*');
   }
 
-  static getById(id) {
-    return DB(table).where({ id }).select('*').first();
+  static getByCarId(id) {
+    return DB(table).where({ carId: id }).select('*');
   }
 
   static searchBy(needle) {
     return DB(table)
-      .where('startAt', 'LIKE', `%${needle}%`)
-      .orWhere('endAt', 'LIKE', `%${needle}%`)
-      .orWhere('carId', '=', `%${needle}%`)
+      .where('startAt', '=', needle)
+      .orWhere('endAt', '=', needle)
+      .orWhere('carId', '=', needle)
       .select('*');
   }
 

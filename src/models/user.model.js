@@ -2,16 +2,18 @@
 
 const DB = require('../configs/knex');
 const { v4: uuidv4 } = require('uuid');
+const UserTag = require('./userTag.model');
+const Tag = require('./Tag.model');
 
 const table = 'users';
 
 class User {
   constructor(payload) {
     this.id = uuidv4();
-    this.email = payload.email;
-    this.firstName = payload.firstName;
-    this.lastName = payload.lastName;
-    this.roleId = payload.roleId;
+    this.email = payload.email.toLowerCase();
+    this.firstName = payload.firstName.toLowerCase();
+    this.lastName = payload.lastName.toLowerCase();
+    this.roleId = payload.roleId.toLowerCase();
   }
 
   save() {
@@ -33,7 +35,6 @@ class User {
       .orWhere('firstName', 'LIKE', `%${needle}%`)
       .orWhere('lastName', 'LIKE', `%${needle}%`)
       .orWhere('email', 'LIKE', `%${needle}%`)
-      .orWhere('roleId', '=', `%${needle}%`)
       .select('*');
   }
 

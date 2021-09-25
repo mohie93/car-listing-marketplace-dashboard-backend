@@ -7,7 +7,7 @@ exports.index = async (req, res) => {
 
 exports.show = async (req, res) => {
   const { id } = req.params;
-  const record = await CarAvailability.getById(id);
+  const record = await CarAvailability.getByCarId(id);
   return record ? { statusCode: 200, data: record } : { statusCode: 404, data: {} };
 };
 

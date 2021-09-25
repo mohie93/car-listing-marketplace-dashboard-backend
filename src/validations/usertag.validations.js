@@ -1,12 +1,43 @@
 const Joi = require('joi');
+const DB = require('../configs/knex');
+
+// helpers //
+async function tagExists(payload) {
+  try {
+    const { tagId } = payload;
+    const record = await DB('tags').where({ id: tagId }).select('*');
+    return Object.keys(record).length > 0;
+  } catch (error) {
+    throw new Error(`${error}`);
+  }
+}
+
+async function userExists(payload) {
+  try {
+    const { userId } = payload;
+    const record = await DB('users').where({ id: userId }).select('*');
+    return Object.keys(record).length > 0;
+  } catch (error) {
+    throw new Error(`${error}`);
+  }
+}
+
+// helpers finish //
 
 exports.validateCreateRequest = async (req, res, next) => {
   try {
     const schema = Joi.object({
-      tagId: Joi.number().required(),
-      userId: Joi.number().required(),
+      tagId: Joi.string().required(),
+      userId: Joi.string().required(),
     });
     await schema.validateAsync(req.body);
+
+    const tagIsExists = await tagExists(req.body);
+    const userIsExists = await userExists(req.body);
+
+    if (!tagIsExists) res.status(400).json({ message: 'Invalid tag' });
+    if (!userIsExists) res.status(400).json({ message: 'Invalid user' });
+
     next();
   } catch (errors) {
     const errorsMessages = errors.details.map((error) => error.message);
@@ -25,8 +56,12 @@ exports.validateGetAllRequest = (req, res, next) => {
 
 exports.validateGetByIdRequest = (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { id, type } = req.params;
     if (!id) res.status(400).json({ message: 'Id param is missing' });
+    if (!type) res.status(400).json({ message: 'type param is missing' });
+
+    if (!['user', 'tag'].includes(type)) res.status(400).json({ message: 'type must be in [user, tag]' });
+
     next();
     // TODO: @Mohie Think about validation case or remove it.
   } catch (error) {
@@ -44,23 +79,6 @@ exports.validateDestroyRequest = (req, res, next) => {
   }
 };
 
-exports.validateSortByRequest = async (req, res, next) => {
-  try {
-    const { attribute, direction } = req.params;
-    if (!attribute) res.status(400).json({ message: 'attribute param is required' });
-    if (!direction) res.status(400).json({ message: 'direction param is required' });
-    const schema = Joi.object({
-      attribute: Joi.string().required().valid('tagId', 'userId'),
-      direction: Joi.string().required().valid('asc', 'desc').default('asc'),
-    });
-    await schema.validateAsync({ attribute, direction });
-    next();
-  } catch (errors) {
-    const errorsMessages = errors.details.map((error) => error.message);
-    res.status(422).json({ message: errorsMessages });
-  }
-};
-
 exports.validateSearchByRequest = (req, res, next) => {
   try {
     const { needle } = req.params;
@@ -68,21 +86,5 @@ exports.validateSearchByRequest = (req, res, next) => {
     next();
   } catch (error) {
     res.status(422).json({ message: error.toString() });
-  }
-};
-
-exports.validateUpdateRequest = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    if (!id) res.status(400).json({ message: 'Id param is missing' });
-    const schema = Joi.object({
-      tagId: Joi.number().required(),
-      userId: Joi.number().required(),
-    });
-    await schema.validateAsync({ ...req.body, id });
-    next();
-  } catch (errors) {
-    const errorsMessages = errors.details.map((error) => error.message);
-    res.status(422).json({ message: errorsMessages });
   }
 };
